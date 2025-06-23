@@ -8,7 +8,7 @@
 }
 
 body {
-  background: #ccc url('v.jpg') no-repeat center center fixed;
+  background: #ccc url('https://github.com/clevencode/radio-station-ui/blob/main/v.jpg?raw=true') no-repeat center center fixed;
   background-size: cover;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
