@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rádio Mobile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="player-container">
+
+  <!-- Botões superiores -->
+<div class="top-buttons">
+  <select id="select-station">
+    <option value="">Escolher Estação</option>
+  </select>
+</div>
+
+    <!-- Capa da estação -->
+    <div class="cover-art" id="cover-art"></div>
+
+    <!-- Informações da estação -->
+    <div class="track-info">
+      <h3>Carregando...</h3>
+      <p>.............</p>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+      <button id="prev">&#9198;</button>
+      <button id="play">&#9658;</button>
+      <button id="next">&#9197;</button>
+    </div>
+  </div>
+
+  <audio id="radio-player"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
