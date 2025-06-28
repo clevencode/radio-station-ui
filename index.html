@@ -5,68 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Web Rádio</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
-  <main class="app-container">
+  <main class="container">
 
-    <!-- Painel do Player -->
-    <section class="panel player-panel active" aria-label="Player de Música">
-      <header class="top-button-container">
-        <button id="view-stations-btn-player" class="top-button" aria-label="Ver estações disponíveis">
-          <i class="fas fa-plus"></i>
+    <!-- Player Principal -->
+    <section class="painel player ativo" aria-label="Player de Música">
+      <header class="topo-botoes">
+        <button id="view-stations-btn-player" class="botao-topo" aria-label="Ver estações disponíveis">
+          <span class="material-icons">add</span>
         </button>
       </header>
 
-      <figure class="cover-art-container">
-        <div class="cover-art" id="cover-art" aria-label="Imagem da estação">
-          <!-- Ícone de coração removido -->
-        </div>
+      <figure class="capa-container">
+        <div class="capa" id="cover-art" aria-label="Imagem da estação"></div>
       </figure>
 
-      <div class="track-info">
+      <div class="info-musica">
         <h1 id="artist-name">Artista</h1>
-        <p id="song-name">Nome da música</p>
+        <p id="song-name">Nome da estação</p>
       </div>
 
-      <nav class="controls" aria-label="Controles de reprodução">
-        <button id="prev-btn" aria-label="Música anterior">
-          <i class="fas fa-backward" aria-hidden="true"></i>
-        </button>
-        <button id="play-pause-btn" aria-label="Reproduzir ou pausar">
-          <i class="fas fa-play" aria-hidden="true"></i>
-        </button>
-        <button id="next-btn" aria-label="Próxima música">
-          <i class="fas fa-forward" aria-hidden="true"></i>
-        </button>
+      <nav class="controles" aria-label="Controles de reprodução">
+        <button id="prev-btn"><span class="material-icons">skip_previous</span></button>
+        <button id="play-pause-btn"><span class="material-icons">play_arrow</span></button>
+        <button id="next-btn"><span class="material-icons">skip_next</span></button>
       </nav>
     </section>
 
-    <!-- Painel de Estações -->
-    <section class="panel stations-list-panel" aria-label="Lista de Estações">
-      <header class="top-button-container">
-        <button id="view-stations-btn-list" class="top-button" aria-label="Voltar ao player">
-          <i class="fas fa-minus"></i>
+    <!-- Lista de Estações -->
+    <section class="painel estacoes-lista" aria-label="Lista de Estações">
+      <header class="topo-botoes">
+        <button id="view-stations-btn-list" class="botao-topo" aria-label="Voltar ao player">
+          <span class="material-icons">remove</span>
         </button>
+        <div class="search-bar">
+  <span class="material-icons">search</span>
+  <input
+    type="text"
+    id="search-input"
+    placeholder="..."
+    aria-label="Pesquisar estação"
+    autocomplete="off"
+  />
+</div>
+
       </header>
 
-      <!-- Mini player no topo da lista -->
-      <div class="mini-player-controls" aria-label="Mini player">
-        <button class="mini-play-btn" aria-label="Reproduzir">
-          <i class="fas fa-play" aria-hidden="true"></i>
-        </button>
-
-        <div class="mini-track-info">
-          <h2 id="mini-artist-name">Artista</h2>
-          <p id="mini-song-name">Nome da música</p>
-        </div>
-
-        <button class="mini-next-btn" aria-label="Próxima estação">
-          <i class="fas fa-forward" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <!-- Grade de estações com rolagem -->
       <div class="stations-grid-wrapper">
         <div class="stations-grid"></div>
       </div>
@@ -76,7 +63,20 @@
 
   <audio id="radio-player" aria-hidden="true"></audio>
   <script src="script.js"></script>
+  <!-- MINI PLAYER FIXO -->
+<div class="mini-player" id="mini-player">
+  <button id="mini-toggle-btn" aria-label="Play/Pause">
+    <span class="material-icons" id="mini-toggle-icon">pause</span>
+  </button>
+  <div class="mini-info">
+    <div id="mini-station-name">Estação atual</div>
+    <div id="mini-station-country">País</div>
+  </div>
+</div>
+
 </body>
 </html>
+
+
 
 
