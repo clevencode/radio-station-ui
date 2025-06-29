@@ -1,5 +1,5 @@
 /* ========================
-   RESET & BASE
+   RESET & BASE STYLES
 ======================== */
 * {
   margin: 0;
@@ -7,30 +7,45 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-bg: #f8f8f8;
+  --secondary-bg: #000923;
+  --player-bg: #e0e0e0;
+  --text-dark: #333;
+  --text-medium: #666;
+  --text-light: #fff;
+  --button-bg: #4a4a4a;
+  --button-hover: #5a5a5a;
+  --active-station: #aaa;
+  --miniplayer-bg: rgba(0, 0, 0, 0.8);
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
 body {
   font-family: 'Roboto', sans-serif;
-  background: #e0e0e0;
+  background: var(--player-bg);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--text-dark);
 }
 
 /* ========================
-   CONTAINER PRINCIPAL
+   MAIN CONTAINER
 ======================== */
 .container {
   position: relative;
   width: 290px;
   height: 430px;
-  background: #f8f8f8;
+  background: var(--primary-bg);
   border-radius: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
   overflow: hidden;
 }
 
 /* ========================
-   PAINÉIS
+   PANELS
 ======================== */
 .painel {
   position: absolute;
@@ -42,24 +57,26 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
+  background: var(--primary-bg);
 }
+
 .painel.ativo {
   opacity: 1;
   pointer-events: all;
 }
 
 /* ========================
-   TOPO / BOTÕES
+   TOP BUTTONS
 ======================== */
 .topo-botoes {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 16px;
 }
 
 .botao-topo {
-  background: #4a4a4a;
-  color: #fff;
+  background: var(--button-bg);
+  color: var(--text-light);
   padding: 10px;
   border: none;
   border-radius: 50%;
@@ -71,14 +88,14 @@ body {
   width: 40px;
   height: 40px;
   transition: background 0.2s ease;
-  margin-right: auto;
 }
+
 .botao-topo:hover {
-  background: #5a5a5a;
+  background: var(--button-hover);
 }
 
 /* ========================
-   PLAYER - CAPA & INFORMAÇÕES
+   PLAYER - COVER & INFO
 ======================== */
 .capa-container {
   display: flex;
@@ -91,25 +108,30 @@ body {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: #e0e0e0;
+  background: var(--player-bg);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-position: center;
+}
+
+.info-musica {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .info-musica h1 {
   font-size: 18px;
-  text-align: center;
-  color: #333;
+  color: var(--text-dark);
+  margin-bottom: 4px;
 }
 
 .info-musica p {
   font-size: 15px;
-  text-align: center;
-  color: #666;
-  margin-top: 4px;
+  color: var(--text-medium);
 }
 
 /* ========================
-   PLAYER - CONTROLES
+   PLAYER CONTROLS
 ======================== */
 .controles {
   display: flex;
@@ -123,26 +145,30 @@ body {
   font-size: 20px;
   border: none;
   border-radius: 50%;
-  background: #e0e0e0;
-  color: #333;
+  background: var(--player-bg);
+  color: var(--text-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
+
 .controles button:hover {
   background: #d0d0d0;
+  transform: scale(1.05);
 }
 
 /* ========================
-   LISTA DE ESTAÇÕES
+   STATION LIST
 ======================== */
 .stations-grid-wrapper {
   flex: 1;
-  background: #000923;
-  overflow: scroll;
+  background: var(--secondary-bg);
+  overflow-y: auto;
   max-height: 260px;
+  padding: 10px;
+  border-radius: 12px;
 }
 
 .stations-grid {
@@ -151,27 +177,29 @@ body {
   gap: 12px;
 }
 
-
 /* ========================
-   CARTÕES DE ESTAÇÕES
+   STATION ITEMS
 ======================== */
 .station-item {
   display: flex;
   align-items: center;
   gap: 10px;
-
   padding: 10px;
   background: transparent;
   cursor: pointer;
-
-  color: white;
-  transition: background 0.3s;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+  border-radius: 8px;
   position: relative;
 }
 
+.station-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .station-item.active {
-  background-color: #aaa;
-  color: black;
+  background-color: var(--active-station);
+  color: var(--text-dark);
 }
 
 .station-item img {
@@ -182,22 +210,27 @@ body {
 }
 
 .station-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .station-name {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .station-country {
   font-size: 12px;
+  opacity: 0.8;
 }
 
-
 /* ========================
-   MINI CONTROLES NO CARD
+   STATION CONTROLS
 ======================== */
 .station-controls {
   display: none;
@@ -205,7 +238,10 @@ body {
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  gap: 8px;
+}
+
+.station-item.active .station-controls {
+  display: block;
 }
 
 .station-controls button {
@@ -214,88 +250,125 @@ body {
   font-size: 16px;
   color: inherit;
   cursor: pointer;
+  padding: 5px;
 }
-
-.station-item.active .station-controls {
-  display: flex;
-}
-
 
 /* ========================
-   BARRA DE PESQUISA
+   SEARCH BAR
 ======================== */
 .search-bar {
   display: flex;
   align-items: center;
   padding: 8px 12px;
   margin-bottom: 16px;
-
-  background: #ddd;
+  background: var(--player-bg);
   border-radius: 30px;
+  width: 100%;
   max-width: 180px;
 }
 
 .search-bar .material-icons {
   font-size: 20px;
   margin-right: 8px;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .search-bar input {
-  width: 100%;
+  flex: 1;
   background: transparent;
   border: none;
   outline: none;
-
   font-size: 14px;
-  color: #000;
+  color: var(--text-dark);
+}
+
+/* ========================
+   MINI PLAYER
+======================== */
+#mini-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+  z-index: 1000;
+  background: var(--miniplayer-bg);
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--text-light);
+  opacity: 0;
+}
+
+#mini-player.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#mini-player.active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.mini-play-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+#mini-station-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#mini-station-country {
+  font-size: 12px;
+  opacity: 0.8;
 }
 
 
 /* ========================
-   MINI-PLAYER FIXO
+   UTILITY CLASSES
 ======================== */
-.mini-player {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  opacity: 0;
-  pointer-events: none;
-
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  background: #111;
-  color: #fff;
-  padding: 12px 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  font-size: 14px;
-
-  z-index: 1000;
-  width: calc(100% - 30px);
-  max-width: 250px;
-  border-radius: 5px 5px 0 0;
-
-  transition: transform 0.3s ease, opacity 0.3s ease;
+.hidden {
+  display: none !important;
 }
 
-.mini-player.active {
-  transform: translateX(-50%) translateY(-170%);
-  opacity: 1;
-  pointer-events: auto;
+.material-icons {
+  user-select: none;
 }
 
-.mini-player button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #fff;
-  cursor: pointer;
+/* ========================
+   SCROLLBAR STYLING
+======================== */
+.stations-grid-wrapper::-webkit-scrollbar {
+  width: 6px;
 }
 
-.mini-info {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
+.stations-grid-wrapper::-webkit-scrollbar-track {
+  background: transparent;
 }
+
+.stations-grid-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.stations-grid-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+

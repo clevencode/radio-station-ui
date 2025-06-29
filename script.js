@@ -8,10 +8,35 @@ const PlayerControls = (() => {
   const prevBtn = document.getElementById('prev-btn');
   const coverArt = document.getElementById('cover-art');
   const miniPlayBtn = document.querySelector('.mini-play-btn');
+  const miniPlayer = document.getElementById('mini-player');
 
   let isPlaying = false;
   let stations = [];
   let currentIndex = 0;
+  let lastScrollPosition = window.pageYOffset;
+
+  // Configura o comportamento de scroll do miniplayer
+  const setupScrollBehavior = () => {
+    const handleScroll = () => {
+      const currentScrollPosition = window.pageYOffset;
+      
+      if (currentScrollPosition > lastScrollPosition) {
+        // Scroll para baixo - mostra o miniplayer
+        miniPlayer?.classList.add('sticky', 'visible');
+      } else {
+        // Scroll para cima - esconde o miniplayer
+        miniPlayer?.classList.remove('visible');
+      }
+      
+      lastScrollPosition = currentScrollPosition;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  };
+
+  // Inicializa o scroll behavior
+  const cleanupScroll = setupScrollBehavior();
 
   function setStations(newStations) {
     stations = newStations;
@@ -42,10 +67,13 @@ const PlayerControls = (() => {
 
   function play() {
     if (!stations[currentIndex]) return;
+    audio.src = stations[currentIndex].url_resolved || '';
     audio.play().then(() => {
       updatePlayIcons('pause');
       isPlaying = true;
       StationGrid.atualizarGrade(stations);
+      // Mostra o miniplayer quando começa a tocar
+      miniPlayer?.classList.add('active', 'visible', 'sticky');
     }).catch(err => {
       console.error('Erro ao reproduzir:', err);
       alert('Não foi possível reproduzir esta estação.');
@@ -68,37 +96,58 @@ const PlayerControls = (() => {
     const icon = station.favicon || 'https://via.placeholder.com/150';
 
     // Atualiza mini-player
-    document.getElementById('mini-station-name').textContent = name;
-    document.getElementById('mini-station-country').textContent = country;
-    document.getElementById('mini-player')?.classList.add('active');
+    if (miniPlayer) {
+      const miniName = miniPlayer.querySelector('#mini-station-name');
+      const miniCountry = miniPlayer.querySelector('#mini-station-country');
+      if (miniName) miniName.textContent = name;
+      if (miniCountry) miniCountry.textContent = country;
+      miniPlayer.classList.add('active');
+    }
 
-    document.getElementById('artist-name').innerText = name;
-    document.getElementById('song-name').innerText = country;
-    if (document.getElementById('mini-artist-name'))
-      document.getElementById('mini-artist-name').innerText = name;
-    if (document.getElementById('mini-song-name'))
-      document.getElementById('mini-song-name').innerText = country;
+    // Atualiza player principal
+    const artistName = document.getElementById('artist-name');
+    const songName = document.getElementById('song-name');
+    if (artistName) artistName.textContent = name;
+    if (songName) songName.textContent = country;
 
-    coverArt.style.backgroundImage = `url(${icon})`;
-    audio.src = station.url_resolved || '';
+    // Atualiza elementos adicionais se existirem
+    const updateIfExists = (id, content) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = content;
+    };
+    
+    updateIfExists('mini-artist-name', name);
+    updateIfExists('mini-song-name', country);
+
+    if (coverArt) coverArt.style.backgroundImage = `url(${icon})`;
   }
 
   // Eventos dos botões principais
-  playBtn?.addEventListener('click', () => isPlaying ? pause() : play());
-  nextBtn?.addEventListener('click', () => {
+  if (playBtn) playBtn.addEventListener('click', () => isPlaying ? pause() : play());
+  if (nextBtn) nextBtn.addEventListener('click', () => {
     if (!stations.length) return;
     setCurrentIndex((currentIndex + 1) % stations.length);
     if (isPlaying) play();
   });
-  prevBtn?.addEventListener('click', () => {
+  if (prevBtn) prevBtn.addEventListener('click', () => {
     if (!stations.length) return;
     setCurrentIndex((currentIndex - 1 + stations.length) % stations.length);
     if (isPlaying) play();
   });
 
-  return { setStations, setCurrentIndex, getCurrentIndex, getIsPlaying, play, pause };
+  return { 
+    setStations, 
+    setCurrentIndex, 
+    getCurrentIndex, 
+    getIsPlaying, 
+    play, 
+    pause,
+    cleanup: cleanupScroll // Para limpar event listeners
+  };
 })();
 
+// Limpeza quando não for mais necessário
+// PlayerControls.cleanup();
 
 // ========================
 // 📻 STATION GRID (com filtro de busca)
@@ -285,60 +334,41 @@ function setupPainelAlternancia() {
   }
 }
 
-/**
- * Configura os controles do mini player (caso existam).
- */
-function setupMiniPlayerControles() {
-  const btnPlayMini = document.querySelector('.mini-play-btn');
-  const btnNextMini = document.querySelector('.mini-next-btn');
-  const btnNext = document.getElementById('next-btn');
 
-  if (btnPlayMini) {
-    btnPlayMini.addEventListener('click', () => {
-      PlayerControls.getIsPlaying() ? PlayerControls.pause() : PlayerControls.play();
+/**
+ * Configuração simplificada do mini player
+ */
+function setupMiniPlayer() {
+  const miniPlayer = document.getElementById('mini-player');
+  const miniPlayBtn = document.querySelector('.mini-play-btn');
+  
+  if (!miniPlayer) return;
+
+  // Controle play/pause
+  if (miniPlayBtn) {
+    miniPlayBtn.addEventListener('click', () => {
+      if (PlayerControls.getIsPlaying()) {
+        PlayerControls.pause();
+        miniPlayer.classList.remove('active');
+      } else {
+        PlayerControls.play();
+        miniPlayer.classList.add('active');
+      }
     });
   }
 
-  if (btnNextMini && btnNext) {
-    btnNextMini.addEventListener('click', () => {
-      btnNext.click();
-    });
-  }
-}
-
-/**
- * Configura o botão de toggle do mini player.
- */
-function setupMiniPlayerToggle() {
-  document.getElementById('mini-toggle-btn')?.addEventListener('click', () => {
-    PlayerControls.getIsPlaying()
-      ? PlayerControls.pause()
-      : PlayerControls.play();
-  });
-}
-
-function setupMiniPlayerToggle() {
-  const toggleBtn = document.getElementById('toggle-mini-btn');
-  const icon = document.getElementById('toggle-icon');
-  const miniPlayer = document.getElementById('mini-player');
-
-  if (!toggleBtn || !icon || !miniPlayer) return;
-
-  toggleBtn.addEventListener('click', () => {
-    const ativo = miniPlayer.classList.toggle('active');
-    icon.textContent = ativo ? 'remove' : 'add';
-  });
-}
-
-function setupMiniPlayerVisibilityToggle() {
-  const toggleBtn = document.getElementById('toggle-mini-btn');
-  const icon = document.getElementById('toggle-icon');
-  const miniPlayer = document.getElementById('mini-player');
-
-  if (!toggleBtn || !icon || !miniPlayer) return;
-
-  toggleBtn.addEventListener('click', () => {
-    const ativo = miniPlayer.classList.toggle('active');
-    icon.textContent = ativo ? 'remove' : 'add';
+  // Mostra/oculta ao rolar
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    
+    if (currentScroll > lastScroll) {
+      // Rolando para baixo - mostra
+      miniPlayer.classList.add('visible');
+    } else {
+      // Rolando para cima - esconde
+      miniPlayer.classList.remove('visible');
+    }
+    lastScroll = currentScroll;
   });
 }
