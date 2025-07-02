@@ -15,35 +15,31 @@ const PlayerControls = (() => {
   let currentIndex = 0;
   let lastScrollPosition = window.pageYOffset;
 
-  // Configura o comportamento de scroll do miniplayer
+  // Configura scroll behavior do mini player
   const setupScrollBehavior = () => {
     const handleScroll = () => {
       const currentScrollPosition = window.pageYOffset;
-      
       if (currentScrollPosition > lastScrollPosition) {
-        // Scroll para baixo - mostra o miniplayer
         miniPlayer?.classList.add('sticky', 'visible');
       } else {
-        // Scroll para cima - esconde o miniplayer
         miniPlayer?.classList.remove('visible');
       }
-      
       lastScrollPosition = currentScrollPosition;
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   };
 
-  // Inicializa o scroll behavior
   const cleanupScroll = setupScrollBehavior();
 
   function setStations(newStations) {
+    if (!Array.isArray(newStations)) return;
     stations = newStations;
     setCurrentIndex(0);
   }
 
   function setCurrentIndex(index) {
+    if (index < 0 || index >= stations.length) return;
     currentIndex = index;
     displayStation(index);
     StationGrid.atualizarGrade(stations);
@@ -72,7 +68,6 @@ const PlayerControls = (() => {
       updatePlayIcons('pause');
       isPlaying = true;
       StationGrid.atualizarGrade(stations);
-      // Mostra o miniplayer quando começa a tocar
       miniPlayer?.classList.add('active', 'visible', 'sticky');
     }).catch(err => {
       console.error('Erro ao reproduzir:', err);
@@ -115,14 +110,12 @@ const PlayerControls = (() => {
       const el = document.getElementById(id);
       if (el) el.textContent = content;
     };
-    
     updateIfExists('mini-artist-name', name);
     updateIfExists('mini-song-name', country);
 
     if (coverArt) coverArt.style.backgroundImage = `url(${icon})`;
   }
 
-  // Eventos dos botões principais
   if (playBtn) playBtn.addEventListener('click', () => isPlaying ? pause() : play());
   if (nextBtn) nextBtn.addEventListener('click', () => {
     if (!stations.length) return;
@@ -135,42 +128,39 @@ const PlayerControls = (() => {
     if (isPlaying) play();
   });
 
-  return { 
-    setStations, 
-    setCurrentIndex, 
-    getCurrentIndex, 
-    getIsPlaying, 
-    play, 
+  return {
+    setStations,
+    setCurrentIndex,
+    getCurrentIndex,
+    getIsPlaying,
+    play,
     pause,
-    cleanup: cleanupScroll // Para limpar event listeners
+    cleanup: cleanupScroll
   };
 })();
 
-// Limpeza quando não for mais necessário
-// PlayerControls.cleanup();
-
 // ========================
-// 📻 STATION GRID (com filtro de busca)
+// 📻 STATION GRID (filtro de busca)
 // ========================
 const StationGrid = (() => {
   const grid = document.querySelector('.stations-grid');
   const inputBusca = document.getElementById('search-input');
-
   let allStations = [];
 
   function atualizarGrade(stations) {
+    if (!grid) return;
     grid.innerHTML = '';
+
     if (!stations.length) {
       grid.innerHTML = `<div class="station-item station-empty">Nenhuma estação encontrada</div>`;
       return;
     }
 
+    const filtro = inputBusca?.value?.toLowerCase() || '';
+
     stations.forEach((station, index) => {
       const name = station.name?.toLowerCase() || '';
-      const filtro = inputBusca?.value?.toLowerCase() || '';
-
-      // Se houver filtro, verifica apenas se a primeira letra do nome corresponde ao filtro
-      if (filtro && name.charAt(0) !== filtro.charAt(0)) return;
+      if (filtro && !name.includes(filtro)) return;
 
       const isCurrent = index === PlayerControls.getCurrentIndex();
       const isPlaying = PlayerControls.getIsPlaying() && isCurrent;
@@ -180,7 +170,8 @@ const StationGrid = (() => {
       if (isCurrent) item.classList.add('active');
 
       item.innerHTML = `
-        <img class="thumb" src="${station.favicon || 'https://via.placeholder.com/40'}" alt="Ícone da estação" />
+        <img class="thumb" src="${station.favicon}" alt=""
+          onerror="this.onerror=null;this.src='img/erro.svg';" />
         <div class="station-info">
           <div class="station-name">${station.name || '<i>Sem nome</i>'}</div>
           <div class="station-country">${station.country || '<span style="opacity:0.6">Desconhecido</span>'}</div>
@@ -192,22 +183,16 @@ const StationGrid = (() => {
         </div>
       `;
 
-      // Ativa a estação ao clicar no card
       item.addEventListener('click', (e) => {
-        // Impede conflito com botão play
         if (e.target.closest('.btn-play')) return;
-
         document.querySelectorAll('.station-item').forEach(s => s.classList.remove('active'));
         item.classList.add('active');
         PlayerControls.setCurrentIndex(index);
         PlayerControls.play();
       });
 
-      // Botão de play/pause embutido
-      const playBtn = item.querySelector('.btn-play');
-      playBtn.addEventListener('click', (e) => {
+      item.querySelector('.btn-play').addEventListener('click', (e) => {
         e.stopPropagation();
-
         const isCurrent = index === PlayerControls.getCurrentIndex();
         if (isCurrent && PlayerControls.getIsPlaying()) {
           PlayerControls.pause();
@@ -221,7 +206,6 @@ const StationGrid = (() => {
     });
   }
 
-  // Atualiza ao digitar
   if (inputBusca) {
     inputBusca.addEventListener('input', () => atualizarGrade(allStations));
     inputBusca.addEventListener('focus', () => {
@@ -238,7 +222,6 @@ const StationGrid = (() => {
   };
 })();
 
-
 // ========================
 // 🌍 STATION FETCHER
 // ========================
@@ -248,7 +231,6 @@ const StationFetcher = (() => {
       const url = `https://de1.api.radio-browser.info/json/stations/bycountry/${encodeURIComponent(countryName)}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Erro ao acessar API');
-
       const data = await res.json();
       const validStations = data.filter(s => s.url_resolved?.startsWith('http'));
 
@@ -266,7 +248,6 @@ const StationFetcher = (() => {
 
   return { fetchStationsByCountry };
 })();
-
 
 // ========================
 // 🌐 COUNTRY DETECTION
@@ -287,17 +268,16 @@ const CountryDetection = (() => {
     StationFetcher.fetchStationsByCountry(pais);
   }
 
-  // Apenas detecção por idioma
   function detectarComGeolocalizacao() {
+    // Atualmente só detecta pelo idioma
     detectarPorIdioma();
   }
 
   return { detectarPorIdioma, detectarComGeolocalizacao };
 })();
 
-
 // ========================
-// 🚀 INICIALIZAÇÃO COM BOAS PRÁTICAS
+// 🚀 INICIALIZAÇÃO
 // ========================
 document.addEventListener('DOMContentLoaded', () => {
   CountryDetection.detectarComGeolocalizacao();
@@ -305,16 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMiniPlayerControles();
   setupMiniPlayerToggle();
 });
-document.addEventListener('DOMContentLoaded', () => {
-  CountryDetection.detectarComGeolocalizacao();
-  setupPainelAlternancia();
-  setupMiniPlayerControles();
-  setupMiniPlayerToggle(); // 👈 adicionado aqui
-});
 
-/**
- * Alterna entre os painéis do player e da lista de estações.
- */
 function setupPainelAlternancia() {
   const btnParaLista = document.getElementById('view-stations-btn-player');
   const btnParaPlayer = document.getElementById('view-stations-btn-list');
@@ -326,7 +297,6 @@ function setupPainelAlternancia() {
       painelPlayer.classList.remove('ativo');
       painelEstacoes.classList.add('ativo');
     });
-
     btnParaPlayer.addEventListener('click', () => {
       painelEstacoes.classList.remove('ativo');
       painelPlayer.classList.add('ativo');
@@ -334,39 +304,29 @@ function setupPainelAlternancia() {
   }
 }
 
-
-/**
- * Configuração simplificada do mini player
- */
-function setupMiniPlayer() {
-  const miniPlayer = document.getElementById('mini-player');
+function setupMiniPlayerControles() {
   const miniPlayBtn = document.querySelector('.mini-play-btn');
-  
-  if (!miniPlayer) return;
-
-  // Controle play/pause
   if (miniPlayBtn) {
     miniPlayBtn.addEventListener('click', () => {
       if (PlayerControls.getIsPlaying()) {
         PlayerControls.pause();
-        miniPlayer.classList.remove('active');
       } else {
         PlayerControls.play();
-        miniPlayer.classList.add('active');
       }
     });
   }
+}
 
-  // Mostra/oculta ao rolar
+function setupMiniPlayerToggle() {
+  const miniPlayer = document.getElementById('mini-player');
+  if (!miniPlayer) return;
+
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
     const currentScroll = window.scrollY;
-    
     if (currentScroll > lastScroll) {
-      // Rolando para baixo - mostra
       miniPlayer.classList.add('visible');
     } else {
-      // Rolando para cima - esconde
       miniPlayer.classList.remove('visible');
     }
     lastScroll = currentScroll;

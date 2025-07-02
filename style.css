@@ -1,63 +1,46 @@
-/* ========================
-   RESET & BASE STYLES
-======================== */
+/* ========== RESET & BASE ========== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  --primary-bg: #f8f8f8;
-  --secondary-bg: #000923;
-  --player-bg: #e0e0e0;
-  --text-dark: #333;
-  --text-medium: #666;
-  --text-light: #fff;
-  --button-bg: #4a4a4a;
-  --button-hover: #5a5a5a;
-  --active-station: #aaa;
-  --miniplayer-bg: rgba(0, 0, 0, 0.8);
-  --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
 body {
   font-family: 'Roboto', sans-serif;
-  background: var(--player-bg);
+  background: #b5b5b5 url('https://github.com/clevencode/radio-station-ui/blob/main/v.jpg?raw=true') center/cover no-repeat;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-dark);
+  color: #575757;
 }
 
-/* ========================
-   MAIN CONTAINER
-======================== */
+/* ========== CONTAINER PRINCIPAL ========== */
 .container {
+  width: 300px;
+  height: 440px;
+  border-radius: 20px;
+  padding: 20px;
+  background: #070707; /* fundo escuro sólido */
+  border: 1px solid #444; /* borda menos transparente */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: relative;
-  width: 290px;
-  height: 430px;
-  background: var(--primary-bg);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
   overflow: hidden;
 }
 
-/* ========================
-   PANELS
-======================== */
+/* ========== PAINEL (EXIBIÇÃO DE CONTEÚDO) ========== */
 .painel {
   position: absolute;
   inset: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
-  background: var(--primary-bg);
 }
 
 .painel.ativo {
@@ -65,53 +48,44 @@ body {
   pointer-events: all;
 }
 
-/* ========================
-   TOP BUTTONS
-======================== */
+/* ========== BOTÕES DE TOPO ========== */
 .topo-botoes {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .botao-topo {
-  background: var(--button-bg);
-  color: var(--text-light);
-  padding: 10px;
-  border: none;
-  border-radius: 50%;
+  width: 100%;
+  height: 45px;
+  border-radius: 30px;
+  background: #333; /* fundo escuro opaco */
+  border: 1px solid #555;
+  color: #fff;
   font-size: 14px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .botao-topo:hover {
-  background: var(--button-hover);
+  background: #444;
+  transform: scale(1.02);
 }
 
-/* ========================
-   PLAYER - COVER & INFO
-======================== */
+/* ========== CAPA & INFORMAÇÕES DA MÚSICA ========== */
 .capa-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .capa {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: var(--player-bg);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-size: cover;
-  background-position: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 2px solid #555;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .info-musica {
@@ -121,205 +95,75 @@ body {
 
 .info-musica h1 {
   font-size: 18px;
-  color: var(--text-dark);
+  font-weight: 600;
   margin-bottom: 4px;
 }
 
 .info-musica p {
-  font-size: 15px;
-  color: var(--text-medium);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* ========================
-   PLAYER CONTROLS
-======================== */
+/* ========== CONTROLES DO PLAYER ========== */
 .controles {
   display: flex;
-  justify-content: space-around;
-  margin-top: auto;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
 }
 
 .controles button {
-  width: 56px;
-  height: 56px;
-  font-size: 20px;
-  border: none;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: var(--player-bg);
-  color: var(--text-dark);
+  border: none;
+  background: #444;
+  color: #fff;
+  font-size: 18px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .controles button:hover {
-  background: #d0d0d0;
-  transform: scale(1.05);
+  background: #555;
+  transform: scale(1.1);
 }
 
-/* ========================
-   STATION LIST
-======================== */
-.stations-grid-wrapper {
-  flex: 1;
-  background: var(--secondary-bg);
-  overflow-y: auto;
-  max-height: 260px;
-  padding: 10px;
-  border-radius: 12px;
+#play-pause-btn {
+  width: 60px;
+  height: 60px;
 }
 
-.stations-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* ========================
-   STATION ITEMS
-======================== */
-.station-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background: transparent;
-  cursor: pointer;
-  color: var(--text-light);
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  position: relative;
-}
-
-.station-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.station-item.active {
-  background-color: var(--active-station);
-  color: var(--text-dark);
-}
-
-.station-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 3px;
-  object-fit: cover;
-}
-
-.station-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.station-name {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.station-country {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-/* ========================
-   STATION CONTROLS
-======================== */
-.station-controls {
-  display: none;
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-}
-
-.station-item.active .station-controls {
-  display: block;
-}
-
-.station-controls button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: inherit;
-  cursor: pointer;
-  padding: 5px;
-}
-
-/* ========================
-   SEARCH BAR
-======================== */
-.search-bar {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  margin-bottom: 16px;
-  background: var(--player-bg);
-  border-radius: 30px;
-  width: 100%;
-  max-width: 180px;
-}
-
-.search-bar .material-icons {
-  font-size: 20px;
-  margin-right: 8px;
-  color: var(--text-dark);
-}
-
-.search-bar input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  color: var(--text-dark);
-}
-
-/* ========================
-   MINI PLAYER
-======================== */
+/* ========== MINI PLAYER FIXO (RODAPÉ) ========== */
 #mini-player {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
-  transform: translateY(100%);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
-  z-index: 1000;
-  background: var(--miniplayer-bg);
+  left: 50%;
+  transform: translate(-50%, 100%);
+  width: 90%;
+  max-width: 300px;
+  background: #111;
+  color: #fff;
   padding: 10px 15px;
+  border-radius: 16px 16px 0 0;
   display: flex;
   align-items: center;
-  gap: 15px;
-  color: var(--text-light);
+  gap: 10px;
   opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 #mini-player.visible {
-  transform: translateY(0);
+  transform: translate(-50%, 0);
   opacity: 1;
-}
-
-#mini-player.active {
-  background: rgba(0, 0, 0, 0.9);
 }
 
 .mini-play-btn {
   background: none;
   border: none;
-  color: var(--text-light);
-  font-size: 24px;
+  color: #fff;
+  font-size: 22px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .mini-info {
@@ -340,35 +184,95 @@ body {
   opacity: 0.8;
 }
 
+/* ========== BARRA DE PESQUISA ========== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #333;
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+}
 
-/* ========================
-   UTILITY CLASSES
-======================== */
+.search-bar .material-icons {
+  font-size: 20px;
+  color: #fff;
+  margin-right: 8px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+/* ========== GRID DE ESTAÇÕES ========== */
+.stations-grid {
+  border-radius: 0 0 10px 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 2px solid #545454;
+}
+
+/* ========== ITEM DE ESTAÇÃO ========== */
+.station-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.station-item:hover {
+  background: #444;
+}
+
+.station-item.active {
+  background: #eee;
+  color: #000;
+}
+
+.station-item img {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* ========== INFORMAÇÕES DA ESTAÇÃO ========== */
+.station-info {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.station-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.station-country {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ========== UTILITÁRIOS ========== */
 .hidden {
   display: none !important;
 }
 
 .material-icons {
   user-select: none;
-}
-
-/* ========================
-   SCROLLBAR STYLING
-======================== */
-.stations-grid-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-
-.stations-grid-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.stations-grid-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-
-.stations-grid-wrapper::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
 }
 

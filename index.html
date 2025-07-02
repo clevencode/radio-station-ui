@@ -24,59 +24,55 @@
       </figure>
 
       <div class="info-musica">
-        <h1 id="artist-name">Artista</h1>
+        <h1 id="artist-name">Rádio</h1>
         <p id="song-name">Nome da estação</p>
       </div>
 
       <nav class="controles" aria-label="Controles de reprodução">
-        <button id="prev-btn"><span class="material-icons">skip_previous</span></button>
-        <button id="play-pause-btn"><span class="material-icons">play_arrow</span></button>
-        <button id="next-btn"><span class="material-icons">skip_next</span></button>
+        <button id="prev-btn" aria-label="Anterior"><span class="material-icons">skip_previous</span></button>
+        <button id="play-pause-btn" aria-label="Tocar/Pausar"><span class="material-icons">play_arrow</span></button>
+        <button id="next-btn" aria-label="Próxima"><span class="material-icons">skip_next</span></button>
       </nav>
     </section>
 
     <!-- Lista de Estações -->
-    <section class="painel estacoes-lista" aria-label="Lista de Estações">
-      <header class="topo-botoes">
-        <button id="view-stations-btn-list" class="botao-topo" aria-label="Voltar ao player">
-          <span class="material-icons">remove</span>
-        </button>
-        <div class="search-bar">
-  <span class="material-icons">search</span>
-  <input
-    type="text"
-    id="search-input"
-    placeholder="..."
-    aria-label="Pesquisar estação"
-    autocomplete="off"
-  />
-</div>
+<section class="painel estacoes-lista" aria-label="Lista de Estações">
+  <header class="topo-botoes">
+    <button id="view-stations-btn-list" class="botao-topo" aria-label="Voltar ao player">
+      <span class="material-icons">remove</span>
+    </button>
 
-      </header>
+    <div class="search-bar">
+      <span class="material-icons">search</span>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Buscar..."
+        aria-label="Pesquisar estação"
+        autocomplete="off"
+      />
+    </div>
+  </header>
 
-      <div class="stations-grid-wrapper">
-        <div class="stations-grid"></div>
-      </div>
-    </section>
+  <div class="stations-grid-wrapper">
+    <div class="stations-grid"></div>
+  </div>
+</section>
 
-  </main>
 
   <audio id="radio-player" aria-hidden="true"></audio>
   <script src="script.js"></script>
-  <!-- MINI PLAYER FIXO -->
-<div class="mini-player" id="mini-player">
-  <button id="mini-toggle-btn" aria-label="Play/Pause">
-    <span class="material-icons" id="mini-toggle-icon">pause</span>
-  </button>
-  <div class="mini-info">
-    <div id="mini-station-name">Estação atual</div>
-    <div id="mini-station-country">País</div>
-  </div>
-</div>
 
+  <!-- MINI PLAYER FIXO -->
+  <div class="mini-player" id="mini-player">
+    <button id="mini-toggle-btn" aria-label="Play/Pause">
+      <span class="material-icons" id="mini-toggle-icon">pause</span>
+    </button>
+    <div class="mini-info">
+      <div id="mini-station-name">Estação atual</div>
+      <div id="mini-station-country">País</div>
+    </div>
 </body>
 </html>
-
-
 
 
