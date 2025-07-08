@@ -170,8 +170,13 @@ const StationGrid = (() => {
       if (isCurrent) item.classList.add('active');
 
       item.innerHTML = `
-        <img class="thumb" src="${station.favicon}" alt=""
-          onerror="this.onerror=null;this.src='img/erro.svg';" />
+       <img
+  class="thumb"
+  src="${station.favicon}"
+  alt="icon"
+  onerror="this.onerror=null;"
+/>
+
         <div class="station-info">
           <div class="station-name">${station.name || '<i>Sem nome</i>'}</div>
           <div class="station-country">${station.country || '<span style="opacity:0.6">Desconhecido</span>'}</div>
@@ -316,6 +321,7 @@ function setupMiniPlayerControles() {
     });
   }
 }
+
 
 function setupMiniPlayerToggle() {
   const miniPlayer = document.getElementById('mini-player');
