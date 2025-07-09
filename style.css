@@ -26,8 +26,7 @@ body {
   height: 455px;
   border-radius: 20px;
   padding: 20px;
-  background: linear-gradient(180deg, #ffffff, hsl(0, 0%, 95%));
-  display: flex;
+  background:hsl(0, 0%, 91%);
   flex-direction: column;
   justify-content: space-between;
   position: relative;
@@ -66,7 +65,7 @@ body {
   width: 47px;
   height: 47px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #e0e0e0, #cfcfcf); /* gradiente suave */
+  background: transparent; /* gradiente suave */
   border: none;
   color: #333;
   font-size: 14px;
@@ -99,15 +98,16 @@ body {
   margin: 20px 0;
 }
 
+
 .capa {
 width: 190px;
 height: 190px;
 border-radius: 50%;
 object-fit: cover;
-background: linear-gradient(145deg, #e0e0e0, #cfcfcf); /* luz e sombra suave */
+background: transparent; /* luz e sombra suave */
 box-shadow: 
-  10px 10px 20px #b8b8b8,     /* sombra inferior/direita */
-  -10px -10px 20px #ffffff;   /* luz superior/esquerda */
+  5px 5px 10px #b8b8b8,     /* sombra inferior/direita */
+  -5px -5px 10px #ffffff;   /* luz superior/esquerda */
 border: none; /* removido para suavidade */
 padding: 5px; /* leve espaço ao redor */
 }
@@ -141,7 +141,7 @@ padding: 5px; /* leve espaço ao redor */
   height: 50px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(145deg, #f0f0f0, #dcdcdc); /* brilho suave */
+  background: transparent; /* brilho suave */
   box-shadow: 
     5px 5px 10px #b8b8b8,     /* sombra externa escura */
     -5px -5px 10px #ffffff;   /* brilho superior */
@@ -170,8 +170,8 @@ padding: 5px; /* leve espaço ao redor */
 
 
 #play-pause-btn {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
 }
 
 /* ========== MINI PLAYER FIXO (RODAPÉ) ========== */
@@ -229,16 +229,16 @@ padding: 5px; /* leve espaço ao redor */
   display: flex;
   align-items: center;
   padding: 10px;
-  background: #333;
-  border-radius: 30px 30px 0px 0px;
+  background: radial-gradient(circle at top left, #ffffff, #c9c9c9);
+  border-radius: 20px 20px 0 0;
   width: 100%;
-  background: linear-gradient(145deg, #f1f1f1, #e0e0e0);
   box-shadow:
-    inset 3px 3px 2px #b3b3b3,
+    inset 3px 3px 5px #b3b3b3,
+    inset -3px -3px 10px #ffffff;
 }
 
 .search-bar .material-icons {
-  font-size: 20px;
+  font-size: 24px;
   color: #444444;
   margin-right: 8px;
 }
@@ -262,10 +262,13 @@ padding: 5px; /* leve espaço ao redor */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  background: linear-gradient(145deg, #ffffff, #e3e3e3);
+  gap: 20px;
+background: radial-gradient(circle at top left, #ffffff, #c9c9c9);
+  border-radius: 0 0 10px 10px;
+  width: 100%;
   box-shadow:
-    inset  0 3px 10px #0000003c;
+    inset 3px 3px 5px #b3b3b3,
+    inset -3px -3px 10px #ffffff;
 }
 
 /* ========== ITEM DE ESTAÇÃO ========== */
@@ -280,16 +283,30 @@ padding: 5px; /* leve espaço ao redor */
 
 
 .station-item.active {
-background: linear-gradient(145deg, #d0d0d0, #eaeaea); /* efeito pressionado */
   color: #000;
+  background: radial-gradient(circle at top left, #ffffff, #c9c9c9);
+  border-radius: none;
+  width: 100%;
+  box-shadow:
+    inset 3px 3px 3px #b3b3b3,
+    inset -3px -3px 5px #f5f5f5;
 }
 
 .station-item img {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: #0f0f0f;
+  background: transparent;
   object-fit: cover;
+   box-shadow:
+     2px 2px 3px #b3b3b3,
+    -2px -2px 3px #ffffff;
+}
+
+.station-item.active img {
+  box-shadow:
+    inset 2px 2px 3px #b3b3b3,
+    inset -2px -2px 3px #ffffff;
 }
 
 /* ========== INFORMAÇÕES DA ESTAÇÃO ========== */
@@ -301,7 +318,7 @@ background: linear-gradient(145deg, #d0d0d0, #eaeaea); /* efeito pressionado */
 }
 
 .station-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -309,7 +326,7 @@ background: linear-gradient(145deg, #d0d0d0, #eaeaea); /* efeito pressionado */
 }
 
 .station-country {
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.7;
 }
 
@@ -320,4 +337,26 @@ background: linear-gradient(145deg, #d0d0d0, #eaeaea); /* efeito pressionado */
 
 .material-icons {
   user-select: none;
+}
+
+/* ========== CUSTOMIZAÇÃO DA SCROLLBAR ========== */
+::-webkit-scrollbar {
+  width: 12px; /* Tamanho adequado para visualização */
+  height: 12px; /* Para barras horizontais */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Fundo suave e discreto */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Cor neutra do polegar */
+  border-radius: 10px; /* Arredondamento suave */
+  transition: background 0.3s ease; /* Transição suave para hover */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Escurece ao passar o mouse */
+  cursor: pointer;
 }
