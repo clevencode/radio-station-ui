@@ -231,23 +231,40 @@ const StationGrid = (() => {
 // 🌍 STATION FETCHER
 // ========================
 const StationFetcher = (() => {
+  /**
+   * Busca estações de rádio pelo nome do país.
+   * @param {string} countryName - Nome do país.
+   */
   async function fetchStationsByCountry(countryName) {
     try {
       const url = `https://de1.api.radio-browser.info/json/stations/bycountry/${encodeURIComponent(countryName)}`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Erro ao acessar API');
+      
+      if (!res.ok) {
+        throw new Error(`Erro na requisição: ${res.status} ${res.statusText}`);
+      }
+      
       const data = await res.json();
-      const validStations = data.filter(s => s.url_resolved?.startsWith('http'));
-
+      
+      // Filtra apenas estações com URL HTTPS
+      const validStations = data.filter(station => 
+        station.url_resolved && station.url_resolved.startsWith('https')
+      );
+      
+      // Atualiza os controles e a grade
       PlayerControls.setStations(validStations);
       StationGrid.atualizarGrade(validStations);
-
-      if (validStations.length && PlayerControls.getIsPlaying()) {
+      
+      console.info(`Foram carregadas ${validStations.length} estações válidas para ${countryName}.`);
+      
+      // Se já estiver tocando, reinicia o player
+      if (validStations.length > 0 && PlayerControls.getIsPlaying()) {
         PlayerControls.play();
       }
+      
     } catch (err) {
       console.error('Erro ao buscar estações:', err);
-      alert('Erro ao carregar estações.');
+      alert('Erro ao carregar estações. Verifique sua conexão e tente novamente.');
     }
   }
 
