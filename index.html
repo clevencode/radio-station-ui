@@ -11,29 +11,39 @@
 <body>
   <main class="container">
 
-    <!-- Player Principal -->
-    <section class="painel player ativo" aria-label="Player de Música">
-      <header class="topo-botoes">
-        <button id="view-stations-btn-player" class="botao-topo" aria-label="Ver estações disponíveis">
-          <span class="material-icons">add</span>
-        </button>
-      </header>
+  <!-- Player Principal --> 
+<section class="painel player ativo" aria-label="Player de Música">
+  <header class="topo-botoes">
+    <button id="view-stations-btn-player" class="botao-topo" aria-label="Ver estações disponíveis">
+      <span class="material-icons">add</span>
+    </button>
+  </header>
 
-      <figure class="capa-container">
-        <div class="capa" id="cover-art" aria-label="Imagem da estação"></div>
-      </figure>
+  <figure class="capa-container">
+    <div class="capa" id="cover-art" aria-label="Imagem da estação"></div>
+  </figure>
 
-      <div class="info-musica">
-        <h1 id="artist-name">...</h1>
-        <p id="song-name">...</p>
-      </div>
+  <div class="info-musica">
+    <h1 id="artist-name">...</h1>
+    <p id="song-name">...</p>
+  </div>
 
-      <nav class="controles" aria-label="Controles de reprodução">
-        <button id="prev-btn" aria-label="Anterior"><span class="material-icons">skip_previous</span></button>
-        <button id="play-pause-btn" aria-label="Tocar/Pausar"><span class="material-icons">play_arrow</span></button>
-        <button id="next-btn" aria-label="Próxima"><span class="material-icons">skip_next</span></button>
-      </nav>
-    </section>
+  <!-- Controles de volume -->
+  <div class="controle-volume">
+  <button id="volume-icon-btn" aria-label="Mudo" class="icone-volume">
+    <span id="volume-icon" class="material-icons">volume_up</span>
+  </button>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+</div>
+
+
+  <nav class="controles" aria-label="Controles de reprodução">
+    <button id="prev-btn" aria-label="Anterior"><span class="material-icons">skip_previous</span></button>
+    <button id="play-pause-btn" aria-label="Tocar/Pausar"><span class="material-icons">play_arrow</span></button>
+    <button id="next-btn" aria-label="Próxima"><span class="material-icons">skip_next</span></button>
+  </nav>
+</section>
+
 
     <!-- Lista de Estações -->
 <section class="painel estacoes-lista" aria-label="Lista de Estações">
@@ -62,16 +72,6 @@
 
   <audio id="radio-player" aria-hidden="true"></audio>
   <script src="script.js"></script>
-
-  <!-- MINI PLAYER FIXO -->
-  <div class="mini-player" id="mini-player">
-    <button id="mini-toggle-btn" aria-label="Play/Pause">
-      <span class="material-icons" id="mini-toggle-icon">pause</span>
-    </button>
-    <div class="mini-info">
-      <div id="mini-station-name">Estação atual</div>
-      <div id="mini-station-country">País</div>
-    </div>
 </body>
 </html>
 

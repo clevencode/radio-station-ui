@@ -23,7 +23,7 @@ body {
 /* ========== CONTAINER PRINCIPAL ========== */
 .container {
   width: 300px;
-  height: 455px;
+  height: 500px;
   border-radius: 20px;
   padding: 20px;
   background:hsl(0, 0%, 91%);
@@ -100,9 +100,9 @@ body {
 
 
 .capa {
-width: 190px;
+width: 200px;
 height: 190px;
-border-radius: 50%;
+border-radius: 20px;
 object-fit: cover;
 background: transparent; /* luz e sombra suave */
 box-shadow: 
@@ -174,55 +174,7 @@ padding: 5px; /* leve espaço ao redor */
   height: 65px;
 }
 
-/* ========== MINI PLAYER FIXO (RODAPÉ) ========== */
-#mini-player {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 100%);
-  width: 90%;
-  max-width: 300px;
-  background: #111;
-  color: #fff;
-  padding: 10px 15px;
-  border-radius: 16px 16px 0 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
 
-#mini-player.visible {
-  transform: translate(-50%, 0);
-  opacity: 1;
-}
-
-.mini-play-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.mini-info {
-  flex: 1;
-  overflow: hidden;
-}
-
-#mini-station-name {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#mini-station-country {
-  font-size: 12px;
-  opacity: 0.8;
-}
 
 /* ========== BARRA DE PESQUISA ========== */
 .search-bar {
@@ -360,3 +312,35 @@ background: radial-gradient(circle at top left, #ffffff, #c9c9c9);
   background: #555; /* Escurece ao passar o mouse */
   cursor: pointer;
 }
+
+.controle-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+#volume-slider {
+  flex: 1;
+}
+
+.controle-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.icone-volume {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+}
+
+#volume-slider {
+  flex: 1;
+}
+
+

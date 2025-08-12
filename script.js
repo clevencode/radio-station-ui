@@ -1,7 +1,6 @@
-// ========================
-// 🎵 PLAYER CONTROLS
-// ========================
+// Controles do player principal e mini-player
 const PlayerControls = (() => {
+  // Referências aos elementos do DOM
   const audio = document.getElementById('radio-player');
   const playBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
@@ -10,12 +9,13 @@ const PlayerControls = (() => {
   const miniPlayBtn = document.querySelector('.mini-play-btn');
   const miniPlayer = document.getElementById('mini-player');
 
+  // Estado interno do player
   let isPlaying = false;
   let stations = [];
   let currentIndex = 0;
   let lastScrollPosition = window.pageYOffset;
 
-  // Configura scroll behavior do mini player
+  // Configura comportamento do mini-player ao rolar a página
   const setupScrollBehavior = () => {
     const handleScroll = () => {
       const currentScrollPosition = window.pageYOffset;
@@ -32,12 +32,14 @@ const PlayerControls = (() => {
 
   const cleanupScroll = setupScrollBehavior();
 
+  // Define lista de estações disponíveis
   function setStations(newStations) {
     if (!Array.isArray(newStations)) return;
     stations = newStations;
     setCurrentIndex(0);
   }
 
+  // Define o índice da estação atual
   function setCurrentIndex(index) {
     if (index < 0 || index >= stations.length) return;
     currentIndex = index;
@@ -45,14 +47,17 @@ const PlayerControls = (() => {
     StationGrid.atualizarGrade(stations);
   }
 
+  // Obtém índice da estação atual
   function getCurrentIndex() {
     return currentIndex;
   }
 
+  // Verifica se o player está tocando
   function getIsPlaying() {
     return isPlaying;
   }
 
+  // Atualiza ícones de play/pause
   function updatePlayIcons(icon) {
     const iconHTML = `<span class="material-icons">${icon}</span>`;
     if (playBtn) playBtn.innerHTML = iconHTML;
@@ -61,6 +66,7 @@ const PlayerControls = (() => {
     if (miniIcon) miniIcon.textContent = icon;
   }
 
+  // Inicia a reprodução da estação atual
   function play() {
     if (!stations[currentIndex]) return;
     audio.src = stations[currentIndex].url_resolved || '';
@@ -75,6 +81,7 @@ const PlayerControls = (() => {
     });
   }
 
+  // Pausa a reprodução
   function pause() {
     audio.pause();
     updatePlayIcons('play_arrow');
@@ -82,6 +89,7 @@ const PlayerControls = (() => {
     StationGrid.atualizarGrade(stations);
   }
 
+  // Exibe informações da estação atual no player
   function displayStation(index) {
     const station = stations[index];
     if (!station) return;
@@ -105,7 +113,7 @@ const PlayerControls = (() => {
     if (artistName) artistName.textContent = name;
     if (songName) songName.textContent = country;
 
-    // Atualiza elementos adicionais se existirem
+    // Atualiza campos extras
     const updateIfExists = (id, content) => {
       const el = document.getElementById(id);
       if (el) el.textContent = content;
@@ -116,6 +124,7 @@ const PlayerControls = (() => {
     if (coverArt) coverArt.style.backgroundImage = `url(${icon})`;
   }
 
+  // Eventos dos botões principais
   if (playBtn) playBtn.addEventListener('click', () => isPlaying ? pause() : play());
   if (nextBtn) nextBtn.addEventListener('click', () => {
     if (!stations.length) return;
@@ -128,6 +137,7 @@ const PlayerControls = (() => {
     if (isPlaying) play();
   });
 
+  // Retorna métodos públicos
   return {
     setStations,
     setCurrentIndex,
@@ -139,18 +149,19 @@ const PlayerControls = (() => {
   };
 })();
 
-// ========================
-// 📻 STATION GRID (filtro de busca)
-// ========================
+
+// Renderiza a lista de estações e permite filtro de busca
 const StationGrid = (() => {
   const grid = document.querySelector('.stations-grid');
   const inputBusca = document.getElementById('search-input');
   let allStations = [];
 
+  // Atualiza a grade com as estações filtradas
   function atualizarGrade(stations) {
     if (!grid) return;
     grid.innerHTML = '';
 
+    // Se não houver estações, mostra mensagem
     if (!stations.length) {
       grid.innerHTML = `<div class="station-item station-empty">Nenhuma estação encontrada</div>`;
       return;
@@ -158,6 +169,7 @@ const StationGrid = (() => {
 
     const filtro = inputBusca?.value?.toLowerCase() || '';
 
+    // Percorre todas as estações e cria o item na grade
     stations.forEach((station, index) => {
       const name = station.name?.toLowerCase() || '';
       if (filtro && !name.includes(filtro)) return;
@@ -165,18 +177,18 @@ const StationGrid = (() => {
       const isCurrent = index === PlayerControls.getCurrentIndex();
       const isPlaying = PlayerControls.getIsPlaying() && isCurrent;
 
+      // Cria o elemento de estação
       const item = document.createElement('div');
       item.className = 'station-item';
       if (isCurrent) item.classList.add('active');
 
       item.innerHTML = `
-       <img
-  class="thumb"
-  src="${station.favicon}"
-  alt="icon"
-  onerror="this.onerror=null;"
-/>
-
+        <img
+          class="thumb"
+          src="${station.favicon}"
+          alt="icon"
+          onerror="this.onerror=null;"
+        />
         <div class="station-info">
           <div class="station-name">${station.name || '<i>Sem nome</i>'}</div>
           <div class="station-country">${station.country || '<span style="opacity:0.6">Desconhecido</span>'}</div>
@@ -188,6 +200,7 @@ const StationGrid = (() => {
         </div>
       `;
 
+      // Evento para selecionar estação clicando no item
       item.addEventListener('click', (e) => {
         if (e.target.closest('.btn-play')) return;
         document.querySelectorAll('.station-item').forEach(s => s.classList.remove('active'));
@@ -196,6 +209,7 @@ const StationGrid = (() => {
         PlayerControls.play();
       });
 
+      // Evento para o botão de play/pause da estação
       item.querySelector('.btn-play').addEventListener('click', (e) => {
         e.stopPropagation();
         const isCurrent = index === PlayerControls.getCurrentIndex();
@@ -211,6 +225,7 @@ const StationGrid = (() => {
     });
   }
 
+  // Eventos de busca
   if (inputBusca) {
     inputBusca.addEventListener('input', () => atualizarGrade(allStations));
     inputBusca.addEventListener('focus', () => {
@@ -219,6 +234,7 @@ const StationGrid = (() => {
     });
   }
 
+  // Retorna função para atualizar grade
   return {
     atualizarGrade: (stations) => {
       allStations = stations;
@@ -227,14 +243,10 @@ const StationGrid = (() => {
   };
 })();
 
-// ========================
-// 🌍 STATION FETCHER
-// ========================
+
+// Busca estações de rádio pela API
 const StationFetcher = (() => {
-  /**
-   * Busca estações de rádio pelo nome do país.
-   * @param {string} countryName - Nome do país.
-   */
+  // Busca estações de um país específico
   async function fetchStationsByCountry(countryName) {
     try {
       const url = `https://de1.api.radio-browser.info/json/stations/bycountry/${encodeURIComponent(countryName)}`;
@@ -246,12 +258,12 @@ const StationFetcher = (() => {
       
       const data = await res.json();
       
-      // Filtra apenas estações com URL HTTPS
+      // Filtra apenas estações HTTPS
       const validStations = data.filter(station => 
         station.url_resolved && station.url_resolved.startsWith('https')
       );
       
-      // Atualiza os controles e a grade
+      // Atualiza controles e lista
       PlayerControls.setStations(validStations);
       StationGrid.atualizarGrade(validStations);
       
@@ -271,10 +283,10 @@ const StationFetcher = (() => {
   return { fetchStationsByCountry };
 })();
 
-// ========================
-// 🌐 COUNTRY DETECTION
-// ========================
+
+// Detecta país do usuário para buscar estações
 const CountryDetection = (() => {
+  // Mapeamento de idioma para país
   const idiomaParaPais = {
     'pt': 'Brazil', 'pt-BR': 'Brazil',
     'en': 'United States', 'en-US': 'United States',
@@ -284,23 +296,23 @@ const CountryDetection = (() => {
     'ht': 'Haiti', 'ht-HT': 'Haiti'
   };
 
+  // Detecta país pelo idioma do navegador
   function detectarPorIdioma() {
     const lang = navigator.language || navigator.userLanguage;
     const pais = idiomaParaPais[lang] || idiomaParaPais[lang.split('-')[0]] || 'Brazil';
     StationFetcher.fetchStationsByCountry(pais);
   }
 
+  // Por enquanto só detecta por idioma
   function detectarComGeolocalizacao() {
-    // Atualmente só detecta pelo idioma
     detectarPorIdioma();
   }
 
   return { detectarPorIdioma, detectarComGeolocalizacao };
 })();
 
-// ========================
-// 🚀 INICIALIZAÇÃO
-// ========================
+
+// Inicialização do app
 document.addEventListener('DOMContentLoaded', () => {
   CountryDetection.detectarComGeolocalizacao();
   setupPainelAlternancia();
@@ -308,6 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMiniPlayerToggle();
 });
 
+
+// Alterna entre o painel do player e a lista de estações
 function setupPainelAlternancia() {
   const btnParaLista = document.getElementById('view-stations-btn-player');
   const btnParaPlayer = document.getElementById('view-stations-btn-list');
@@ -326,6 +340,8 @@ function setupPainelAlternancia() {
   }
 }
 
+
+// Configura botão de play/pause no mini-player
 function setupMiniPlayerControles() {
   const miniPlayBtn = document.querySelector('.mini-play-btn');
   if (miniPlayBtn) {
@@ -340,6 +356,7 @@ function setupMiniPlayerControles() {
 }
 
 
+// Mostra ou esconde mini-player conforme o scroll
 function setupMiniPlayerToggle() {
   const miniPlayer = document.getElementById('mini-player');
   if (!miniPlayer) return;
@@ -355,3 +372,84 @@ function setupMiniPlayerToggle() {
     lastScroll = currentScroll;
   });
 }
+
+
+// Controle de Volume do Player (acessa o <audio> diretamente)
+(function () {
+  // Pega o slider e o elemento <audio> diretamente do DOM
+  const volumeSlider = document.getElementById('volume-slider');
+  const audioEl = document.getElementById('radio-player');
+
+  // Se não existir o slider ou o audio, não faz nada
+  if (!volumeSlider || !audioEl) return;
+
+  // Carrega volume salvo (se houver) ou usa volume atual do audio
+  const savedVolume = localStorage.getItem('radioVolume');
+  if (savedVolume !== null) {
+    audioEl.volume = parseFloat(savedVolume);
+    volumeSlider.value = savedVolume;
+  } else {
+    // garante que o slider mostre o volume atual do elemento
+    volumeSlider.value = String(audioEl.volume ?? 1);
+  }
+
+  // Atualiza o volume em tempo real ao mover o slider
+  volumeSlider.addEventListener('input', (e) => {
+    const novoVolume = parseFloat(e.target.value);
+    audioEl.volume = novoVolume; // valor entre 0 e 1
+    // opcional: salva preferência do usuário
+    localStorage.setItem('radioVolume', String(novoVolume));
+  });
+})();
+
+(function () {
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeIconBtn = document.getElementById('volume-icon-btn');
+  const volumeIcon = document.getElementById('volume-icon');
+  const audioEl = document.getElementById('radio-player');
+
+  if (!volumeSlider || !volumeIconBtn || !audioEl) return;
+
+  // Carregar volume salvo
+  const savedVolume = localStorage.getItem('radioVolume');
+  if (savedVolume !== null) {
+    audioEl.volume = parseFloat(savedVolume);
+    volumeSlider.value = savedVolume;
+    updateIcon(savedVolume);
+  }
+
+  // Atualiza ícone conforme volume
+  function updateIcon(vol) {
+    if (vol == 0) {
+      volumeIcon.textContent = 'volume_off';
+    } else if (vol <= 0.5) {
+      volumeIcon.textContent = 'volume_down';
+    } else {
+      volumeIcon.textContent = 'volume_up';
+    }
+  }
+
+  // Slider muda o volume
+  volumeSlider.addEventListener('input', (e) => {
+    const vol = parseFloat(e.target.value);
+    audioEl.volume = vol;
+    localStorage.setItem('radioVolume', vol);
+    updateIcon(vol);
+  });
+
+  // Botão mudo / desmudo
+  let lastVolume = volumeSlider.value;
+  volumeIconBtn.addEventListener('click', () => {
+    if (audioEl.volume > 0) {
+      lastVolume = audioEl.volume;
+      audioEl.volume = 0;
+      volumeSlider.value = 0;
+      updateIcon(0);
+    } else {
+      audioEl.volume = lastVolume || 0.5;
+      volumeSlider.value = lastVolume || 0.5;
+      updateIcon(audioEl.volume);
+    }
+    localStorage.setItem('radioVolume', audioEl.volume);
+  });
+})();
